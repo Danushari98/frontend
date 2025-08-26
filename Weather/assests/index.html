@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weatherapp</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ 
+</head>
+<body>
+    <i class="fa-solid fa-face-awesome"></i>
+    <main>
+        <form action="">
+            <input type="text" autocomplete="off" id="valuesearch">
+            <button>
+                <i class="fa-regular fa-house"></i><i class="fa-solid fa-face-awesome"></i>
+            <!-- <img src="../assests/search-icon-png-23.png" width="25px"> -->
+            </button>
+        </form>
+        <br>
+        <section class="result">
+            <figure class="name" id="city">
+            <figcaption>London</figcaption>
+            <img src="https://flagsapi.com/GB/shiny/32.png" width="30px">
+            </figure>
+            <br>
+            <figure class="temperature" id="temperature">
+                <center><img src="http://openweathermap.org/img/wn/10d@4x.png"  width="100 px"></center>
+            <figcaption>
+                <span>51</span>
+                <sup>0</sup>
+            </figcaption>
+            <p class="description">
+                overcast clouds
+            </p><br>
+
+
+            <u1>
+                <li>
+                    <span>clouds</span>
+                    <img src="../assests/Cloud-Silhouette.png" width="10px">
+                    <span id="clouds"> 98%</span>
+                </li>
+                <li>
+                    <span>Humidity</span>
+                    <img src="../assests/humidity.png" width="10px">
+                    <span id="humidity">55%</span>
+                </li>
+                <li>
+                    <span>Pressure</span>
+                    <img src="../assests/pressure gauge.png" width="10px">
+                    <span  id="pressure">1001</span>hpa
+                </li>
+            </u1>
+                          
+        </section>
+    </main>
+    <script src="app.js"></script>
+    
+</body>
+</html>

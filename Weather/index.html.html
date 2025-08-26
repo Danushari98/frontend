@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weatherapp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(to bottom, black, white);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            width: 300px;
+            height: max-content;
+            min-height: 300px;
+            background-color: aqua;
+            border-radius: 30px;
+            box-shadow: 0 30px 50px black;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        main form {
+            border: 1px solid rgb(226, 143, 112);
+            display: flex;
+            justify-content: space-between;
+            border-radius: 30px;
+        }
+
+        main form input,
+        main form button {
+            border: none;
+            background-color: transparent;
+            outline: none;
+            padding: 10px;
+        }
+
+        main form i {
+            opacity: 0.7;
+        }
+
+        main .result {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        main .result .name {
+            font-weight: bold;
+            font-size: large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        main .temperature img {
+            width: 150px;
+            filter: drop-shadow(0 10px 50px black);
+        }
+
+        main .temperature figcaption {
+            font-size: 3em;
+        }
+
+        main .description {
+            padding: 10px 0 30px;
+        }
+
+        main ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        main li {
+            background-color: brown;
+            color: white;
+            border-radius: 10px;
+            padding: 20px 10px;
+            background-image: linear-gradient(to bottom, transparent 50%, black);
+            font-weight: bold;
+            font-size: small;
+        }
+
+        main li:nth-child(2) {
+            background-color: violet;
+        }
+
+        main li:nth-child(3) {
+            background-color: blueviolet;
+        }
+
+        main.error {
+            animation: errorEffect 0.3s linear 1;
+        }
+
+        @keyframes errorEffect {
+            0% { transform: translate(10px, 5px); }
+            25% { transform: translate(-5px, 0); }
+            50% { transform: translate(8px, 2px); }
+            75% { transform: translate(-2px, 5px); }
+            100% { transform: translate(0, 0); }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <form action="">
+            <input type="text" autocomplete="off" id="valuesearch" placeholder="Enter city">
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+        <br>
+        <section class="result">
+            <figure class="name" id="city">
+                <figcaption>London</figcaption>
+                <img src="https://flagsapi.com/GB/shiny/32.png" width="30px">
+            </figure>
+            <br>
+            <figure class="temperature" id="temperature">
+                <center><img src="http://openweathermap.org/img/wn/10d@4x.png" width="100px"></center>
+                <figcaption>
+                    <span>51</span><sup>°</sup>
+                </figcaption>
+                <p class="description">overcast clouds</p>
+            </figure>
+            <br>
+            <ul>
+                <li>
+                    <span>Clouds</span>
+                    <img src="../assests/Cloud-Silhouette.png" width="10px">
+                    <span id="clouds">98%</span>
+                </li>
+                <li>
+                    <span>Humidity</span>
+                    <img src="../assests/humidity.png" width="10px">
+                    <span id="humidity">55%</span>
+                </li>
+                <li>
+                    <span>Pressure</span>
+                    <img src="../assests/pressure gauge.png" width="10px">
+                    <span id="pressure">1001</span> hPa
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        let valuesearch = document.getElementById('valuesearch');
+        let city = document.getElementById('city');
+        let temperature = document.getElementById('temperature');
+        let description = document.querySelector('.description');
+        let clouds = document.getElementById('clouds');
+        let humidity = document.getElementById('humidity');
+        let pressure = document.getElementById('pressure');
+        let form = document.querySelector('form');
+        let main = document.querySelector('main');
+
+        let apiKey = '9505fd1df737e20152fbd78cdb289b6a';
+        let baseUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=' + apiKey + '&q=';
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (valuesearch.value !== '') {
+                searchweather();
+            }
+        });
+
+        const searchweather = () => {
+            fetch(baseUrl + valuesearch.value)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.cod == 200) {
+                        city.querySelector('figcaption').innerText = data.name;
+                        city.querySelector('img').src = 'https://flagsapi.com/' + data.sys.country + '/shiny/32.png';
+
+                        temperature.querySelector('img').src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@4x.png';
+                        temperature.querySelector('figcaption span').innerText = data.main.temp;
+                        description.innerText = data.weather[0].description;
+                        clouds.innerText = data.clouds.all + '%';
+                        humidity.innerText = data.main.humidity + '%';
+                        pressure.innerText = data.main.pressure + ' hPa';
+                    } else {
+                        main.classList.add('error');
+                        setTimeout(() => {
+                            main.classList.remove('error');
+                        }, 1000);
+                    }
+                    valuesearch.value = '';
+                });
+        };
+
+        const initApp = () => {
+            valuesearch.value = 'Washington';
+            searchweather();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
